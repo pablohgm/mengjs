@@ -17,6 +17,7 @@ AudioPlayer redPlayer;
 boolean buttonOn;
 boolean greenEffectOn;
 boolean redEffectOn;
+int redCounter = 0;
 float speedAdjust=1.0;
 
 PImage [] vinils;
@@ -35,7 +36,9 @@ void setup()
     backgroundImage = loadImage("images/mix-console.png");
     maxi = new Maxim(this);
     player = maxi.loadFile("beat2.wav");
+    player.setLooping(true);
     greenPlayer = maxi.loadFile("piano-effect.wav");
+    greenPlayer.setLooping(true);
     redPlayer = maxi.loadFile("splash.wav");
     vinils = loadImages("images/vinils/vinil",".png", 15);
     btnOff = loadImage("images/off.png");
@@ -50,11 +53,7 @@ void draw()
 { 
     background(backgroundImage);
     drawSpeed();
-    
-    /*if(!redPlayer.isPlaying()){
-      console.log("red No");
-      redEffectOn = false;
-    }*/
+    counterPlayerRed();
     
     if(greenEffectOn){
       image(btnGreen, GREEN_BTN_WIDTH, GREEN_BTN_HEIGHT);
@@ -81,6 +80,16 @@ void draw()
     }
 }
 
+void counterPlayerRed(){
+  if(redEffectOn){
+    redCounter++;
+    if(redCounter>50){
+      redEffectOn = false;
+      redCounter = 0;
+    }
+  }
+}
+
 void drawSpeed(){
   for(int i=0; i<offLights.length;i++){
       image(offLights[i], (MARGIN*2)*(i+1), height-(MARGIN*4));
@@ -102,11 +111,16 @@ void mousePressed() {
         player.play();
     }
     else {
+      stopMixConsole();
       player.stop();
+      greenPlayer.stop();
+      redPlayer.stop();
     }
   }
-  startGreenEffect();
-  startRedEffect();
+  if(buttonOn){
+    startGreenEffect();
+    startRedEffect();
+  }
 }
 
 void startRedEffect(){
@@ -154,6 +168,14 @@ void mouseDragged() {
 public int calculeSpeed(float speed, float max){
   int tmpSpeed = (int)((speed*10)/max);
   return tmpSpeed;
+}
+
+void stopMixConsole(){
+  player.stop();
+  greenPlayer.stop();
+  redPlayer.stop();
+  redEffectOn = false;
+  greenEffectOn = false;
 }
 
 //The MIT License (MIT)
