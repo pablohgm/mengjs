@@ -29,13 +29,14 @@ PImage backgroundImage;
 PImage [] speedLights;
 PImage [] offLights;
 
+/* @pjs preload="images/mix-console.png"; */
 
 void setup()
 {
     size(555,555);
     backgroundImage = loadImage("images/mix-console.png");
     maxi = new Maxim(this);
-    player = maxi.loadFile("beat2.wav");
+    player = maxi.loadFile("beat3.wav");
     player.setLooping(true);
     greenPlayer = maxi.loadFile("piano-effect.wav");
     greenPlayer.setLooping(true);
